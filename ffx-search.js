@@ -56,7 +56,7 @@
     tv: ['televizor', 'televizoare', 'televizor', 'tv'],
     cbl: ['cablu', 'cabluri', 'kabel', 'cable', 'shnur'],
     spk: ['boxe', 'difuzoare', 'speakers', 'kolonki', 'akustika'],
-    cam: ['camera web', 'webcam', 'web camera', 'vebkamera', 'veb kamera'],
+    cam: ['camera web', 'camere web', 'webcam', 'web camera', 'vebkamera', 'veb kamera'],
     pad: ['gamepad', 'joystick', 'controller', 'dzhoistik', 'geimpad'],
     mic: ['microfon', 'mikrofon', 'microphone'],
     tpa: ['pasta termoconductoare', 'pasta termica', 'termopasta', 'thermal paste'],
@@ -110,7 +110,7 @@
   }
 
   /* ---------- index ---------- */
-  var P = [], INV = {}, VOCAB = [], loading = null;
+  var P = [], INV = {}, VOCAB = [], TIPL = {}, loading = null;
   var CDN = 'https://static.tildacdn.com/';
   function add(tok, id, w) {
     var m = INV[tok] || (INV[tok] = {});
@@ -122,10 +122,11 @@
       var p = { uid: r[0], t: r[1], sku: r[2] || '', p: r[3] || 0, o: r[4] || 0, img: r[5] ? (r[5].charAt(0) === '~' ? CDN + r[5].slice(1) : r[5]) : '', u: r[6] && r[6].charAt(0) === '/' ? location.origin + r[6] : r[6], m: r[7] || '', b: r[8] || '', x: r[9] || '', tp: r[10] || '' };
       P.push(p);
       var n = base(p.t), st = synTokens(n);
-      // categoria: tipul din titlu (primele 2 cuvinte), apoi caracteristica „Tip”, altfel textul „Tip”
-      var cs = st.syn.filter(function (x) { return CAT[x.c.slice(1)] && x.pos < 2; }).sort(function (x, y) { return x.pos - y.pos; });
-      if (!cs.length && p.tp) cs = synTokens(base(p.tp)).syn.filter(function (x) { return CAT[x.c.slice(1)] && x.pos < 3; }).sort(function (x, y) { return x.pos - y.pos; });
-      p.c = cs.length ? cs[0].c.slice(1) : (p.tp ? 'tip:' + p.tp : 'alt');
+      // categoria: tipul din titlu (primele 2 cuvinte) -> caracteristica „Tip” (primul cuvânt) -> „Categorie” (dacă Tip nu e un accesoriu) -> textul „Tip”
+      var catOf = function (txt, maxPos) { var c = synTokens(base(txt)).syn.filter(function (x) { return CAT[x.c.slice(1)] && x.pos <= maxPos; }).sort(function (x, y) { return x.pos - y.pos; }); return c.length ? c[0].c.slice(1) : ''; };
+      var categ = p.tp && p.x.lastIndexOf(p.tp, 0) === 0 ? p.x.slice(p.tp.length).trim() : '';
+      p.c = catOf(p.t, 1) || (p.tp && catOf(p.tp, 0)) || (categ && !/pentru|accesor|adapt|gent|rucsac|husa|husă|stati|stați|suport|cablu/i.test(p.tp) && catOf(categ, 0)) || (p.tp ? 'tip:' + base(p.tp) : 'alt');
+      if (p.tp) TIPL['tip:' + base(p.tp)] = p.tp;
       n.split(' ').forEach(function (tk, i) { if (tk) add(tk, id, i < 3 ? 3 : 2); });
       st.syn.forEach(function (s) { add(s.c, id, s.pos < 3 ? 3 : 1); });
       if (p.b) base(p.b).split(' ').forEach(function (tk) { if (tk) add(tk, id, 2); });
@@ -264,7 +265,7 @@
   }
   function scan() { css(); document.querySelectorAll('form.ffx-search input[name=q]').forEach(attach); }
 
-  window.FFXSearch = { load: load, search: search, base: base, cats: CAT, _build: build };
+  window.FFXSearch = { load: load, search: search, base: base, cats: CAT, label: function (c, ru) { return CAT[c] ? CAT[c][ru ? 1 : 0] : (TIPL[c] || c.replace(/^tip:/, '')); }, _build: build };
   // în afara /catalog, bara de sus caută mereu în tot magazinul (nu doar în categoria curentă)
   function global() { if (!/^\/catalog\/?$/.test(location.pathname)) window.ffxStoreSearch = function () { return false; }; }
   if (document.readyState !== 'loading') global(); else document.addEventListener('DOMContentLoaded', global);
