@@ -215,13 +215,13 @@
    if(ok){var r=FFXSearch.search(q,{limit:5000}),fx=Object.keys(r.fixes||{}).map(function(k){return r.fixes[k]}),note='';
     if(r.layout)note=' ('+T('_lay','tastatura era pe altă limbă')+')';else if(fx.length)note=' ('+T('_fix','am corectat:')+' '+fx.join(', ')+')';else if(r.approx)note=' ('+T('_apx','potriviri apropiate')+')';
     if(n!==SQ)return;var all=r.items,cat='',srt='rel',CT=FFXSearch.cats||{},cnt={};all.forEach(function(p){var c=p.c||'alt';cnt[c]=(cnt[c]||0)+1});
-    var keys=Object.keys(cnt).sort(function(a,b){return (a==='alt')-(b==='alt')||cnt[b]-cnt[a]});
-    var lab=function(c){return CT[c]?CT[c][RU?1:0]:c};
+    var keys=Object.keys(cnt).sort(function(a,b){return (a==='alt')-(b==='alt')||cnt[b]-cnt[a]});var KC=function(p){var c=p.c||'alt';return keys.indexOf(c)>-1?c:'alt'};if(keys.length>12){var rest=keys.slice(11).filter(function(k){return k!=='alt'});keys=keys.slice(0,11).filter(function(k){return k!=='alt'});cnt.alt=(cnt.alt||0);rest.forEach(function(k){cnt.alt+=cnt[k]});keys.push('alt')}
+    var lab=function(c){return CT[c]?CT[c][RU?1:0]:c.replace(/^tip:/,'')};
     var tb=document.createElement('div');tb.className='ffxh__tb';
     tb.innerHTML=(keys.length>1?'<div class="ffxh__ch"><button class="on" data-c="">'+T('_all','Toate')+'<small>'+all.length+'</small></button>'+keys.map(function(c){return '<button data-c="'+c+'">'+esc(lab(c))+'<small>'+cnt[c]+'</small></button>'}).join('')+'</div>':'')+
      '<select aria-label="'+T('_srt','Sortare')+'"><option value="rel">'+T('_rel','Cele mai potrivite')+'</option><option value="pa">'+T('_pa','Preț: mai ieftine întâi')+'</option><option value="pd">'+T('_pd','Preț: mai scumpe întâi')+'</option><option value="dis">'+T('_dis','Cu reducere')+'</option></select>';
     var ot=ss.querySelector('.ffxh__tb');if(ot)ot.remove();ss.querySelector('.ffxh__hd').after(tb);
-    var draw=function(){var l=all.filter(function(p){return !cat||(p.c||'alt')===cat});
+    var draw=function(){var l=all.filter(function(p){return !cat||KC(p)===cat});
      if(srt==='pa')l=l.slice().sort(function(a,b){return a.p-b.p});else if(srt==='pd')l=l.slice().sort(function(a,b){return b.p-a.p});else if(srt==='dis')l=l.filter(function(p){return p.o>p.p}).sort(function(a,b){return (b.o-b.p)/b.o-(a.o-a.p)/a.o});
      var o=ss.querySelector('.ffxh__car');if(o)o.remove();show(l,l.length,note)};
     tb.addEventListener('click',function(e){var b=e.target.closest('button[data-c]');if(!b)return;cat=b.dataset.c;tb.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b)});draw()});

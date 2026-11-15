@@ -2,7 +2,7 @@
 
 Citește API-ul public al magazinului Tilda (toate produsele din secțiunea „toate”),
 păstrează doar produsele în stoc și scrie un index compact:
-  {"v":1,"n":<nr>,"p":[[uid,titlu,sku,pret,pret_vechi,poza,url,eticheta,brand,extra], ...]}
+  {"v":1,"n":<nr>,"p":[[uid,titlu,sku,pret,pret_vechi,poza,url,eticheta,brand,extra,tip], ...]}
 Rulare: python build_index.py [fișier_ieșire]
 """
 import json, sys, time, urllib.request, urllib.parse
@@ -42,7 +42,7 @@ def row(p):
     url = p.get("url") or ""
     if url.startswith(SITE):
         url = url[len(SITE):]
-    brand, extra = "", []
+    brand, extra, tip = "", [], ""
     for c in p.get("characteristics") or []:
         k = (c.get("title") or "").strip().lower()
         v = (c.get("value") or "").strip()
@@ -52,9 +52,11 @@ def row(p):
             brand = v
         elif k in EXTRA_KEYS:
             extra.append(v)
+            if k in ("tip", "тип") and not tip:
+                tip = v
     num = lambda x: round(float(x)) if x not in (None, "") else 0
     return [str(p["uid"]), p.get("title", "").strip(), p.get("sku") or "", num(p.get("price")),
-            num(p.get("priceold")), img, url, (p.get("mark") or "").strip(), brand, " ".join(extra)[:80]]
+            num(p.get("priceold")), img, url, (p.get("mark") or "").strip(), brand, " ".join(extra)[:80], tip[:60]]
 
 
 def main(out):

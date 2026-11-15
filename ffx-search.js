@@ -46,7 +46,7 @@
     hdd: ['hdd', 'hard disk', 'harddisk', 'disc dur', 'zhestkii disk', 'vinchester'],
     mon: ['monitor', 'monitoare', 'monitory', 'display', 'displei', 'ekran'],
     lap: ['laptop', 'laptopuri', 'notebook', 'noutbuk', 'noutbuki', 'notbuk'],
-    pc: ['calculator', 'calculatoare', 'computer', 'kompiuter', 'kompiutery', 'sistemnyi blok', 'sistemnik', 'pc', 'desktop'],
+    pc: ['all in one', 'calculator', 'calculatoare', 'computer', 'kompiuter', 'kompiutery', 'sistemnyi blok', 'sistemnik', 'pc', 'desktop'],
     mou: ['mouse', 'mausi', 'mysh', 'myshka', 'myshki'],
     kbd: ['tastatura', 'tastaturi', 'keyboard', 'klaviatura', 'klaviatury'],
     hph: ['casti', 'casca', 'intraaurale', 'circumaurale', 'supra aurale', 'earbuds', 'headset', 'headphones', 'naushniki', 'garnitura'],
@@ -119,11 +119,13 @@
   function build(data) {
     P = []; INV = {};
     (data.p || []).forEach(function (r, id) {
-      var p = { uid: r[0], t: r[1], sku: r[2] || '', p: r[3] || 0, o: r[4] || 0, img: r[5] ? (r[5].charAt(0) === '~' ? CDN + r[5].slice(1) : r[5]) : '', u: r[6] && r[6].charAt(0) === '/' ? location.origin + r[6] : r[6], m: r[7] || '', b: r[8] || '', x: r[9] || '' };
+      var p = { uid: r[0], t: r[1], sku: r[2] || '', p: r[3] || 0, o: r[4] || 0, img: r[5] ? (r[5].charAt(0) === '~' ? CDN + r[5].slice(1) : r[5]) : '', u: r[6] && r[6].charAt(0) === '/' ? location.origin + r[6] : r[6], m: r[7] || '', b: r[8] || '', x: r[9] || '', tp: r[10] || '' };
       P.push(p);
       var n = base(p.t), st = synTokens(n);
-      var cs = st.syn.filter(function (x) { return CAT[x.c.slice(1)]; }).sort(function (x, y) { return x.pos - y.pos; });
-      p.c = cs.length && cs[0].pos < 4 ? cs[0].c.slice(1) : (p.x && (cs = synTokens(base(p.x)).syn.filter(function (x) { return CAT[x.c.slice(1)]; })).length ? cs[0].c.slice(1) : (cs.length ? cs[0].c.slice(1) : 'alt'));
+      // categoria: tipul din titlu (primele 2 cuvinte), apoi caracteristica „Tip”, altfel textul „Tip”
+      var cs = st.syn.filter(function (x) { return CAT[x.c.slice(1)] && x.pos < 2; }).sort(function (x, y) { return x.pos - y.pos; });
+      if (!cs.length && p.tp) cs = synTokens(base(p.tp)).syn.filter(function (x) { return CAT[x.c.slice(1)] && x.pos < 3; }).sort(function (x, y) { return x.pos - y.pos; });
+      p.c = cs.length ? cs[0].c.slice(1) : (p.tp ? 'tip:' + p.tp : 'alt');
       n.split(' ').forEach(function (tk, i) { if (tk) add(tk, id, i < 3 ? 3 : 2); });
       st.syn.forEach(function (s) { add(s.c, id, s.pos < 3 ? 3 : 1); });
       if (p.b) base(p.b).split(' ').forEach(function (tk) { if (tk) add(tk, id, 2); });
