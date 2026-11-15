@@ -45,3 +45,8 @@ Nu găsește: „iphone” (nu sunt telefoane în magazin).
 - Republicate prin API (comm pagepublish) cele 43 de pagini din sitemap + 363484403 /ffx-produs-header + 363484703 /ffx-produs-footer. Toate cele 44 de URL-uri din sitemap conțin scriptul.
 - Verificat live: /laptopuri (sugestii „монитор делл”, bara trimite la /catalog), /remontpk pe 390 px în meniul lateral (captura sugestii-telefon.png).
 - Revenire: golesc HEAD în setări + republic paginile; pe 5560232403 pun .bak-inaintedecautare-api și public /catalog.
+
+## 2026-11-15 ~16:20 UTC – filtre pe categorii + sortare (la cererea ION)
+- Pagina de rezultate are butoane de categorie (max 12 + „Altele”, cu numărul de produse) și sortare: Cele mai potrivite / Preț crescător / Preț descrescător / Cu reducere. RU tradus. Pe telefon butoanele se derulează orizontal, sortarea pe toată lățimea.
+- Categoria produsului: tipul din titlu (primele 2 cuvinte) → caracteristica „Tip” → „Categorie” → textul „Tip”. Indexul are acum și coloana tip (r[10]).
+- Bloc /catalog sha1 b3302bf3… (repo ab96f2a), publicat și verificat live; ffx-search.js repo e91a9e2.
