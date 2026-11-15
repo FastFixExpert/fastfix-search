@@ -1,0 +1,257 @@
+<!-- FFX magazin home (v2): hero slider + tiles + live product carousels from the Tilda catalog. RO/RU. -->
+<style>
+.ffxh{--r:#D0240E;--rd:#B01E0B;--k:#111;--m:#5B5F66;--l:#E6E7EA;--bg:#F5F6F8;font-family:'Manrope',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:var(--k);padding:16px 0 8px}
+.ffx-intro{display:none!important}
+.ffxh *{box-sizing:border-box}
+.ffxh a{color:inherit;text-decoration:none}
+.ffxh button{font-family:inherit;cursor:pointer}
+.ffxh__w{max-width:1192px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:minmax(0,1fr);gap:36px}
+.ffxh__h1{margin:0 0 -18px;font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1.25}
+.ffxh__hero{position:relative;border-radius:16px;overflow:hidden;background:#EEF0F3;aspect-ratio:1160/380;max-width:100%;touch-action:pan-y}
+.ffxh__tr{display:flex;height:100%;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+.ffxh__s{flex:0 0 100%;height:100%;position:relative;display:grid;grid-template-columns:44% 56%;grid-template-rows:minmax(0,100%);align-items:center;overflow:hidden}
+.ffxh__s .tx{padding:0 0 0 76px;display:grid;gap:12px;justify-items:start;position:relative;z-index:2}
+.ffxh__ey{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--r)}
+.ffxh__s h2{margin:0;font-size:44px;line-height:1.02;font-weight:800;letter-spacing:-.03em}
+.ffxh__s p{margin:0;font-size:16px;color:var(--m);max-width:34ch;line-height:1.45}
+.ffxh__fr{font-size:15px;font-weight:600;color:var(--m)}.ffxh__fr b{font-size:30px;font-weight:800;color:var(--k);letter-spacing:-.02em;margin-left:4px}
+.ffxh__fr s{margin-left:8px;font-size:16px}
+.ffxh__btn{display:inline-flex;align-items:center;gap:8px;background:var(--r);color:#fff!important;font-weight:800;font-size:15px;padding:13px 22px;border-radius:10px;transition:background .2s}
+.ffxh__btn:hover{background:var(--rd)}
+.ffxh__ph{position:relative;height:100%;min-height:0;min-width:0;overflow:hidden;padding:20px 28px 0 0;display:flex;align-items:flex-end;justify-content:center;gap:0}
+.ffxh__ph img{mix-blend-mode:multiply;object-fit:contain;display:block;max-height:100%;min-width:0}
+.ffxh__s.g{background:linear-gradient(100deg,#F3F4F6 0%,#F3F4F6 40%,#E4E6EA 100%)}
+.ffxh__s.g .ffxh__ph img{height:92%;width:auto;margin:0 -2%}
+.ffxh__s.g .ffxh__ph img:nth-child(2){height:100%;z-index:2}
+.ffxh__s.l{background:linear-gradient(100deg,#F4F5F7 0%,#F4F5F7 42%,#E7EAF0 100%)}
+.ffxh__s.l .ffxh__ph{align-items:center}
+.ffxh__s.l .ffxh__ph img{width:42%;height:auto;margin:0 -4%}
+.ffxh__s.l .ffxh__ph img:nth-child(2){width:50%;z-index:2}
+.ffxh__s.d{background:linear-gradient(100deg,#FCF1EF 0%,#FCF1EF 42%,#F7DDD8 100%)}
+.ffxh__s.d .ffxh__ph{align-items:center}.ffxh__s.d .ffxh__ph img{width:70%;height:auto}
+.ffxh__pct{position:absolute;right:8%;top:12%;width:108px;height:108px;border-radius:50%;background:var(--r);color:#fff;display:grid;place-items:center;font-weight:800;font-size:30px;letter-spacing:-.02em;z-index:3;transform:rotate(-8deg)}
+.ffxh__s.t{background:linear-gradient(100deg,#F3F4F6 0%,#F3F4F6 42%,#E9EBEE 100%)}
+.ffxh__s.t .ffxh__ph{align-items:flex-end;padding-bottom:26px}.ffxh__s.t .ffxh__ph img{height:88%;width:auto}
+.ffxh__s.t .ffxh__ph img+img{height:auto;width:56%;margin-left:-6%}
+.ffxh__arr{position:absolute;top:50%;margin-top:-22px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.12);display:grid;place-items:center;z-index:4;opacity:.9}
+.ffxh__arr svg{width:18px;height:18px}
+.ffxh__arr.p{left:14px}.ffxh__arr.n{right:14px}
+.ffxh__dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:8px;z-index:4}
+.ffxh__dots button{width:9px;height:9px;padding:0;border:0;border-radius:9px;background:rgba(17,17,17,.22);transition:width .3s,background .3s}
+.ffxh__dots button[aria-current=true]{width:28px;background:var(--r)}
+.ffxh__tiles{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:-20px}
+.ffxh__tile{background:#fff;border:1px solid var(--l);border-radius:14px;padding:12px 12px 12px 14px;display:flex;align-items:center;gap:10px;min-height:84px;transition:border-color .2s,box-shadow .2s}
+.ffxh__tile:hover{border-color:#cfd2d7;box-shadow:0 6px 18px rgba(17,17,17,.07)}
+.ffxh__tile span{flex:1;min-width:0;display:grid;gap:2px}
+.ffxh__tile b{font-size:14px;line-height:1.25;font-weight:700}
+.ffxh__tile small{font-size:12px;color:var(--m);font-weight:600}
+.ffxh__tile img,.ffxh__tile i{width:58px;height:58px;flex:0 0 58px;object-fit:contain;mix-blend-mode:multiply}
+.ffxh__tile i{display:grid;place-items:center;border-radius:12px;background:#FCECE9;color:var(--r);font-style:normal;font-weight:800;font-size:24px}
+.ffxh__usp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:-16px}
+.ffxh__usp div{display:flex;gap:12px;align-items:center;font-size:14px;font-weight:700;line-height:1.3}
+.ffxh__usp small{display:block;font-size:12px;font-weight:600;color:var(--m)}
+.ffxh__usp svg{flex:0 0 40px;width:40px;height:40px;padding:9px;border-radius:50%;background:#fff;border:1px solid var(--l);color:var(--r)}
+.ffxh__sec{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}.ffxh__sec>*{min-width:0}
+.ffxh__hd{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.ffxh__hd h3{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.ffxh__all{font-size:14px;font-weight:700;color:var(--m)!important}
+.ffxh__all:hover{color:var(--r)!important}
+.ffxh__nav{margin-left:auto;display:flex;gap:8px}
+.ffxh__nav button{width:38px;height:38px;border-radius:50%;border:1px solid var(--l);background:#fff;display:grid;place-items:center}
+.ffxh__nav button:disabled{opacity:.35;cursor:default}
+.ffxh__nav svg{width:16px;height:16px}
+.ffxh__tabs{display:flex;gap:6px;flex-wrap:wrap}
+.ffxh__tabs button{border:1px solid var(--l);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;color:var(--m)}
+.ffxh__tabs button[aria-selected=true]{border-color:var(--k);background:var(--k);color:#fff}
+.ffxh__trk{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 48px)/5);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-behavior:smooth;padding:2px}
+.ffxh__trk::-webkit-scrollbar{display:none}
+.ffxh__c{scroll-snap-align:start;background:#fff;border:1px solid var(--l);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px;position:relative;min-width:0;transition:box-shadow .2s,border-color .2s}
+.ffxh__c:hover{border-color:#cfd2d7;box-shadow:0 8px 22px rgba(17,17,17,.08)}
+.ffxh__im{display:block;aspect-ratio:1;max-width:100%;margin-bottom:4px}
+.ffxh__im img{width:100%;height:100%;object-fit:contain;display:block}
+[data-car=gaming] .ffxh__im{aspect-ratio:4/5;overflow:hidden}[data-car=gaming] .ffxh__im img{object-fit:cover;transform:scale(1.25)}
+.ffxh__bd{position:absolute;top:10px;left:10px;display:flex;gap:4px;z-index:2}
+.ffxh__bd span{font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:var(--k);color:#fff;line-height:1.3}
+.ffxh__bd span.n{background:#1F7A4D}
+.ffxh__bd span.o{background:var(--r)}
+.ffxh__c h4{margin:0;font-size:14px;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+.ffxh__old{font-size:13px;color:var(--m);display:flex;gap:6px;align-items:center;min-height:19px}
+.ffxh__old em{font-style:normal;font-size:11px;font-weight:800;color:var(--r);background:#FCECE9;border-radius:5px;padding:1px 6px}
+.ffxh__pr{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.1;font-variant-numeric:tabular-nums}
+.ffxh__pr small{font-size:13px;font-weight:700;margin-left:3px}
+.ffxh__rt{font-size:12px;color:var(--m);font-weight:600}
+.ffxh__rt b{color:#1F5FBF;background:#E8F0FC;border-radius:5px;padding:1px 6px;margin-right:6px;font-weight:800}
+.ffxh__bb{display:flex;gap:6px;margin-top:6px}
+.ffxh__add{flex:1;border:0;border-radius:9px;background:var(--r);color:#fff;font-weight:800;font-size:13px;padding:10px 6px;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .2s}
+.ffxh__add:hover{background:var(--rd)}
+.ffxh__add svg{width:16px;height:16px}
+.ffxh__det{border:1px solid var(--l);border-radius:9px;padding:0 12px;font-weight:700;font-size:13px;display:flex;align-items:center}
+.ffxh__det:hover{border-color:var(--k)}
+.ffxh__sk{border-radius:14px;background:linear-gradient(90deg,#eef0f3 25%,#f6f7f9 50%,#eef0f3 75%);background-size:200% 100%;animation:ffxsk 1.2s infinite;aspect-ratio:.62}
+@keyframes ffxsk{to{background-position:-200% 0}}
+.ffxh__wide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ffxh__pb{border-radius:16px;min-height:180px;padding:26px 30px;display:grid;grid-template-columns:minmax(0,1fr) 40%;align-items:center;gap:10px;overflow:hidden;background:#F1F2F5;position:relative}
+.ffxh__pb h3{margin:4px 0 6px;font-size:24px;line-height:1.12;font-weight:800;letter-spacing:-.02em}
+.ffxh__pb p{margin:0 0 12px;color:var(--m);font-size:14px}
+.ffxh__pb img{width:100%;height:150px;object-fit:contain;mix-blend-mode:multiply}
+.ffxh__pb.r{background:#FCEFEC}
+.ffxh__lnk{font-weight:800;font-size:14px;color:var(--r)!important}
+.ffxh__br{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+.ffxh__br a{height:58px;border-radius:12px;background:#fff;border:1px solid var(--l);display:grid;place-items:center;font-weight:800;font-size:16px;color:#3a3d42!important;letter-spacing:.01em}
+.ffxh__br a:hover,.ffxh__br a.on{border-color:var(--k)}.ffxh__br a.on{background:var(--k);color:#fff!important}.ffxh__sec[hidden]{display:none!important}.ffxh__car.g .ffxh__trk{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible;scroll-snap-type:none}@media (max-width:1199px){.ffxh__car.g .ffxh__trk{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (max-width:960px){.ffxh__car.g .ffxh__trk{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (max-width:640px){.ffxh__car.g .ffxh__trk{grid-template-columns:repeat(2,minmax(0,1fr))}}.ffxh__sres{margin-top:18px}html:not(.ffx-q) .r[data-record-type="2421"],html:not(.ffx-q) .ffxh__more{display:none!important}
+.ffxh__more{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0 0 -26px}
+@media (max-width:1199px){.ffxh__trk{grid-auto-columns:calc((100% - 36px)/4)}.ffxh__tiles{grid-template-columns:repeat(3,minmax(0,1fr))}.ffxh__s h2{font-size:36px}}
+@media (max-width:960px){.ffxh__trk{grid-auto-columns:calc((100% - 24px)/3)}.ffxh__usp{grid-template-columns:repeat(2,minmax(0,1fr))}.ffxh__br{grid-template-columns:repeat(4,minmax(0,1fr))}.ffxh__s .tx{padding-left:32px}.ffxh__s h2{font-size:30px}.ffxh__s p{display:none}}
+@media (max-width:640px){
+ .ffxh__w{gap:28px}.ffxh__h1{font-size:18px;margin-bottom:-14px}
+ .ffxh__hero{aspect-ratio:auto;height:430px}
+ .ffxh__s{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+ .ffxh__s .tx{padding:22px 20px 0;gap:8px}.ffxh__s h2{font-size:27px}.ffxh__fr b{font-size:24px}
+ .ffxh__ph{height:100%;max-height:250px;padding-bottom:30px}
+ .ffxh__s.g .ffxh__ph img{height:100%}
+ .ffxh__arr{display:none}
+ .ffxh__tiles{display:flex;overflow-x:auto;scrollbar-width:none;margin-top:-14px}.ffxh__tile{flex:0 0 200px}
+ .ffxh__usp{display:flex;overflow-x:auto;scrollbar-width:none;gap:20px}.ffxh__usp div{flex:0 0 auto;white-space:nowrap}
+ .ffxh__trk{grid-auto-columns:47%;gap:8px}
+ .ffxh__c{padding:10px}.ffxh__pr{font-size:18px}.ffxh__det{display:none}
+ .ffxh__nav{display:none}
+ .ffxh__hd h3{font-size:21px}.ffxh__all{margin-left:auto}
+ .ffxh__wide{grid-template-columns:1fr}.ffxh__pb{padding:20px;min-height:150px}.ffxh__pb h3{font-size:20px}.ffxh__pb img{height:110px}
+}
+@media (prefers-reduced-motion:reduce){.ffxh *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+<section class="ffxh" id="ffxh" aria-label="Magazin">
+<div class="ffxh__w">
+ <h1 class="ffxh__h1" data-t="h1">Magazin de calculatoare și laptopuri în Chișinău</h1>
+ <div class="ffxh__sec ffxh__sres" data-sres hidden><div class="ffxh__hd"><h3></h3><a class="ffxh__all" href="/catalog" data-t="clr">Șterge căutarea</a></div></div>
+ <div class="ffxh__hero" id="ffxh-hero" aria-roledescription="carusel">
+  <div class="ffxh__tr" id="ffxh-tr">
+   <div class="ffxh__s g"><div class="tx"><span class="ffxh__ey" data-t="s1e">Calculatoare pentru gaming</span><h2 data-t="s1h">PC-uri de gaming gata de joc</h2><p data-t="s1p">Ryzen și Intel cu plăci video RTX. Verificate înainte de expediere, cu garanție.</p><div class="ffxh__fr"><span data-t="from">de la</span> <b data-min="gaming">—</b></div><a class="ffxh__btn" href="/calculatoare-pentru-gaming" data-t="s1b">Alege PC-ul</a></div><div class="ffxh__ph" data-hero="gaming"></div></div>
+   <div class="ffxh__s l"><div class="tx"><span class="ffxh__ey" data-t="s2e">Laptopuri noi și second</span><h2 data-t="s2h">Laptopuri pentru lucru, studii și gaming</h2><p data-t="s2p">Lenovo, Dell, HP, ASUS, MSI, Apple. Livrare în toată Moldova.</p><div class="ffxh__fr"><span data-t="from">de la</span> <b data-min="laptopuri">—</b></div><a class="ffxh__btn" href="/laptopuri" data-t="s2b">Vezi laptopurile</a></div><div class="ffxh__ph" data-hero="laptopuri"></div></div>
+   <div class="ffxh__s d"><div class="tx"><span class="ffxh__ey" data-t="s3e">Preț redus</span><h2 data-deal="t">—</h2><div class="ffxh__fr"><b data-deal="p">—</b><s data-deal="o"></s></div><a class="ffxh__btn" data-deal="u" href="/reduceri" data-t="s3b">Vezi oferta</a></div><div class="ffxh__ph" data-hero="deal"></div><span class="ffxh__pct" data-deal="pct">%</span></div>
+   <div class="ffxh__s t"><div class="tx"><span class="ffxh__ey">Trade-in</span><h2 data-t="s4h">Predă tehnica veche, plătești mai puțin</h2><p data-t="s4p">Evaluăm calculatorul sau laptopul vechi și scădem suma din prețul celui nou.</p><a class="ffxh__btn" href="/trade-in" data-t="s4b">Evaluează tehnica</a></div><div class="ffxh__ph" data-hero="trade"></div></div>
+  </div>
+  <button class="ffxh__arr p" id="ffxh-p" aria-label="Înapoi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <button class="ffxh__arr n" id="ffxh-n" aria-label="Înainte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+  <div class="ffxh__dots" id="ffxh-d"></div>
+ </div>
+ <div class="ffxh__tiles">
+  <a class="ffxh__tile" href="/calculatoare-pentru-gaming"><span><b data-t="c1">Calculatoare pentru gaming</b><small data-cnt="gaming"></small></span><img data-tile="gaming" alt=""></a>
+  <a class="ffxh__tile" href="/laptopuri"><span><b data-t="c2">Laptopuri</b><small data-cnt="laptopuri"></small></span><img data-tile="laptopuri" alt=""></a>
+  <a class="ffxh__tile" href="/calculatoare-de-birou"><span><b data-t="c3">Calculatoare de birou</b><small data-cnt="birou"></small></span><img data-tile="birou" alt=""></a>
+  <a class="ffxh__tile" href="/periferice"><span><b data-t="c4">Periferice</b><small data-cnt="periferice"></small></span><img data-tile="periferice" alt=""></a>
+  <a class="ffxh__tile" href="/reduceri"><span><b data-t="c5">Reduceri</b><small data-cnt="deals"></small></span><i>%</i></a>
+  <a class="ffxh__tile" href="/trade-in"><span><b>Trade-in</b><small data-t="c6s">predă tehnica veche</small></span><i><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.5 6.2L3 16M3 21v-5h5"/></svg></i></a>
+ </div>
+ <div class="ffxh__usp">
+  <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span data-t="u1">Garanție până la 12 luni</span></div>
+  <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><span data-t="u2">Rate până la 12 luni</span></div>
+  <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5M8 11l2 2 4-4"/></svg><span data-t="u3">Verificat înainte de expediere</span></div>
+  <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span data-t="u4">Livrare în toată Moldova</span></div>
+ </div>
+ <div class="ffxh__sec" data-car="gaming" data-href="/calculatoare-pentru-gaming"><div class="ffxh__hd"><h3 data-t="k1">Calculatoare pentru gaming</h3><a class="ffxh__all" href="/calculatoare-pentru-gaming" data-t="all">Vezi toate</a></div></div>
+ <div class="ffxh__sec" data-car="laptopuri" data-href="/laptopuri"><div class="ffxh__hd"><h3 data-t="k2">Laptopuri</h3><div class="ffxh__tabs" role="tablist"><button role="tab" aria-selected="true" data-f="nou" data-t="tn">Noi</button><button role="tab" aria-selected="false" data-f="second" data-t="ts">Second</button><button role="tab" aria-selected="false" data-f="rtx" data-t="tg">Pentru gaming</button></div><a class="ffxh__all" href="/laptopuri" data-t="all">Vezi toate</a></div></div>
+ <div class="ffxh__wide">
+  <a class="ffxh__pb r" href="/laptopuri"><div><span class="ffxh__ey" data-t="w1e">Plată în rate</span><h3 data-t="w1h">Rate până la 12 luni</h3><p data-t="w1p">Pentru calculatoare, laptopuri și periferice.</p><span class="ffxh__lnk" data-t="det">Detalii →</span></div><img data-tile="rate" alt=""></a>
+  <a class="ffxh__pb" href="/calculatoare-de-birou"><div><span class="ffxh__ey" data-t="w2e">Pentru birou și acasă</span><h3 data-t="w2h">Mini PC-uri, mici și silențioase</h3><p data-t="w2p">Ocupă puțin loc pe birou.</p><span class="ffxh__lnk" data-t="w2b">Calculatoare de birou →</span></div><img data-tile="birou" alt=""></a>
+ </div>
+ <div class="ffxh__sec" data-car="deals" data-href="/reduceri"><div class="ffxh__hd"><h3 data-t="k3">Prețuri reduse</h3><a class="ffxh__all" href="/reduceri" data-t="all">Vezi toate</a></div></div>
+ <div class="ffxh__sec" data-car="periferice" data-href="/periferice"><div class="ffxh__hd"><h3 data-t="k4">Periferice și accesorii</h3><a class="ffxh__all" href="/periferice" data-t="all">Vezi toate</a></div></div>
+ <div class="ffxh__sec"><div class="ffxh__hd"><h3 data-t="k5">Branduri</h3></div><div class="ffxh__br"><a href="/catalog?q=lenovo" data-b>Lenovo</a><a href="/catalog?q=dell" data-b>Dell</a><a href="/catalog?q=hp" data-b>HP</a><a href="/catalog?q=asus" data-b>ASUS</a><a href="/catalog?q=acer" data-b>Acer</a><a href="/catalog?q=msi" data-b>MSI</a><a href="/catalog?q=apple" data-b>Apple</a><a href="/catalog?q=microsoft" data-b>Microsoft</a></div></div>
+ <div class="ffxh__sec" data-bres hidden><div class="ffxh__hd"><h3></h3></div></div>
+ <h2 class="ffxh__more" id="toate" data-t="more">Toate produsele</h2>
+</div>
+</section>
+<script>
+(function(){
+ var R=document.getElementById('ffxh'); if(!R||R.dataset.on) return; R.dataset.on=1;
+ var RU=(document.documentElement.getAttribute('data-ffx-lang')||document.documentElement.lang||'ro').slice(0,2)==='ru';
+ var TR={h1:'Магазин компьютеров и ноутбуков в Кишинёве',s1e:'Игровые компьютеры',s1h:'Игровые ПК, готовые к игре',s1p:'Ryzen и Intel с видеокартами RTX. Проверены перед отправкой, с гарантией.',from:'от',s1b:'Выбрать ПК',s2e:'Новые и б/у ноутбуки',s2h:'Ноутбуки для работы, учёбы и игр',s2p:'Lenovo, Dell, HP, ASUS, MSI, Apple. Доставка по всей Молдове.',s2b:'Смотреть ноутбуки',s3e:'Сниженная цена',s3b:'Смотреть',s4h:'Сдайте старую технику — заплатите меньше',s4p:'Оценим старый компьютер или ноутбук и вычтем сумму из цены нового.',s4b:'Оценить технику',
+ c1:'Игровые компьютеры',c2:'Ноутбуки',c3:'Офисные компьютеры',c4:'Периферия',c5:'Скидки',c6s:'сдайте старую технику',u1:'Гарантия до 12 месяцев',u2:'Рассрочка до 12 месяцев',u3:'Проверено перед отправкой',u4:'Доставка по всей Молдове',k1:'Игровые компьютеры',k2:'Ноутбуки',tn:'Новые',ts:'Б/у',tg:'Для игр',all:'Смотреть все',w1e:'Оплата в рассрочку',w1h:'Рассрочка до 12 месяцев',w1p:'На компьютеры, ноутбуки и периферию.',det:'Подробнее →',w2e:'Для офиса и дома',w2h:'Мини-ПК, компактные и тихие',w2p:'Занимают мало места на столе.',w2b:'Офисные компьютеры →',k3:'Сниженные цены',k4:'Периферия и аксессуары',k5:'Бренды',more:'Все товары',_rf:'Результаты по запросу',_sr:'Ищем',_fix:'исправлено:',_apx:'похожие результаты',_lay:'была включена другая раскладка',_nf:'Ничего не найдено по запросу',clr:'Сбросить поиск',
+ _lei:'лей',_cart:'В корзину',_det:'Подробнее',_rate:'до 12 мес.',_rl:'Рассрочка',_nou:'Новый',_sec:'Б/у',_p:'товаров',_added:'Добавлено'};
+ var T=function(k,ro){return RU&&TR[k]?TR[k]:ro};
+ if(RU) R.querySelectorAll('[data-t]').forEach(function(e){var k=e.dataset.t;if(TR[k])e.textContent=TR[k]});
+ var LEI=T('_lei','lei');
+ var PL=function(n){var a=n%10,b=n%100;return n+' '+(RU?(a===1&&b!==11?'товар':a>=2&&a<=4&&(b<12||b>14)?'товара':'товаров'):(n===1?'produs':(b>=20||(b===0&&n>0))?'de produse':'produse'))};
+ var fmt=function(n){return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ')};
+ var PARTS={gaming:'418266856724',laptopuri:'496064983954',periferice:'221764102654',birou:'805049744024'};
+ var api=function(id){return fetch('https://store.tildaapi.one/api/getproductslist/?storepartuid='+id+'&recid='+(R.closest('[id^=rec]')||{id:'rec0'}).id.slice(3)+'&c='+Date.now()+'&getallparts=true&getoptions=false&slice=1&size=500').then(function(r){return r.json()}).then(function(j){return (j.products||[]).filter(function(p){return +p.quantity!==0||p.quantity===''}).map(norm)}).catch(function(){return []})};
+ function norm(p){var g=[];try{g=JSON.parse(p.gallery||'[]')}catch(e){}return {t:p.title,p:+p.price||0,o:+p.priceold||0,m:(p.mark||'').trim(),img:g[0]&&g[0].img,img2:g[1]&&g[1].img,u:p.url,uid:p.uid,sku:p.sku}}
+ var cart='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6"/></svg>';
+ var arr=function(d){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="'+(d?'M9 18l6-6-6-6':'M15 18l-6-6 6-6')+'"/></svg>'};
+ function esc(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+ var TH=function(u,w){var m=/^https:\/\/static\.tildacdn\.(\w+)\/([^\/]+)\/([^\/]+)$/.exec(u||'');return m?'https://thb.tildacdn.'+m[1]+'/'+m[2]+'/-/resize/'+w+'x/'+m[3]:u};
+ function card(p,i){var off=p.o>p.p?Math.round((1-p.p/p.o)*100):0;var mk=/^nou|new/i.test(p.m)?'<span class="n">'+T('_nou','Nou')+'</span>':(p.m?'<span>'+T('_sec','Second')+'</span>':'');
+  return '<article class="ffxh__c"><div class="ffxh__bd">'+mk+(off?'<span class="o">−'+off+'%</span>':'')+'</div><a class="ffxh__im" href="'+esc(p.u)+'"><img loading="lazy" decoding="async" src="'+esc(TH(p.img,400))+'" alt="'+esc(p.t)+'"></a><h4><a href="'+esc(p.u)+'">'+esc(p.t).replace(/\s*\|\s*/g,' · ')+'</a></h4><div class="ffxh__old">'+(off?'<s>'+fmt(p.o)+' '+LEI+'</s><em>−'+fmt(p.o-p.p)+' '+LEI+'</em>':'')+'</div><div class="ffxh__pr">'+fmt(p.p)+'<small>'+LEI+'</small></div><div class="ffxh__rt"><b>'+T('_rl','Rate')+'</b>'+T('_rate','până la 12 luni')+'</div><div class="ffxh__bb"><button class="ffxh__add" data-i="'+i+'">'+cart+T('_cart','În coș')+'</button><a class="ffxh__det" href="'+esc(p.u)+'">'+T('_det','Detalii')+'</a></div></article>'}
+ function carousel(sec,list){var old=sec.querySelector('.ffxh__car');if(old)old.remove();var hd=sec.querySelector('.ffxh__hd');
+  if(!hd.querySelector('.ffxh__nav'))hd.insertAdjacentHTML('beforeend','<div class="ffxh__nav"><button aria-label="Înapoi">'+arr(0)+'</button><button aria-label="Înainte">'+arr(1)+'</button></div>');
+  var w=document.createElement('div');w.className='ffxh__car';w.innerHTML='<div class="ffxh__trk">'+list.slice(0,16).map(card).join('')+'</div>';sec.appendChild(w);
+  var tr=w.firstChild,b=hd.querySelectorAll('.ffxh__nav button');var up=function(){b[0].disabled=tr.scrollLeft<6;b[1].disabled=tr.scrollLeft+tr.clientWidth>tr.scrollWidth-6};
+  b[0].onclick=function(){tr.scrollBy({left:-tr.clientWidth,behavior:'smooth'})};b[1].onclick=function(){tr.scrollBy({left:tr.clientWidth,behavior:'smooth'})};tr.addEventListener('scroll',up,{passive:true});up();
+  tr.addEventListener('click',function(e){var a=e.target.closest('.ffxh__add');if(!a)return;var p=list[+a.dataset.i];
+   if(window.tcart__addProduct){window.tcart__addProduct({name:p.t,price:p.p,img:p.img,link:p.u,uid:p.uid,sku:p.sku,amount:p.p,quantity:1});a.lastChild.textContent=T('_added','Adăugat');setTimeout(function(){a.lastChild.textContent=T('_cart','În coș')},1600)}else location.href=p.u})}
+ function grid(sec,list){var old=sec.querySelector('.ffxh__car');if(old)old.remove();var w=document.createElement('div');w.className='ffxh__car g';w.innerHTML='<div class="ffxh__trk">'+list.slice(0,100).map(card).join('')+'</div>';sec.appendChild(w);
+  w.addEventListener('click',function(e){var a=e.target.closest('.ffxh__add');if(!a)return;var p=list[+a.dataset.i];
+   if(window.tcart__addProduct){window.tcart__addProduct({name:p.t,price:p.p,img:p.img,link:p.u,uid:p.uid,sku:p.sku,amount:p.p,quantity:1});a.lastChild.textContent=T('_added','Adăugat');setTimeout(function(){a.lastChild.textContent=T('_cart','În coș')},1600)}else location.href=p.u})}
+ function cutout(p){return new Promise(function(res){if(!p||!p.img)return res(false);var i=new Image();i.crossOrigin='anonymous';i.onload=function(){try{var c=document.createElement('canvas');c.width=c.height=10;var x=c.getContext('2d');x.drawImage(i,0,0,10,10);var d=x.getImageData(0,0,10,10).data,w=0;[0,9,90,99].forEach(function(k){var o=k*4;if(d[o]>232&&d[o+1]>232&&d[o+2]>232||d[o+3]<20)w++});res(w>=3)}catch(e){res(false)}};i.onerror=function(){res(false)};i.src=TH(p.img,40)})}
+ function skel(sec){var w=document.createElement('div');w.className='ffxh__car';w.innerHTML='<div class="ffxh__trk">'+'<div class="ffxh__sk"></div>'.repeat(5)+'</div>';sec.appendChild(w)}
+ if(/[?&]tfc_[^=]*=/.test(location.search)){document.documentElement.classList.add('ffx-q');setTimeout(function(){var h=document.getElementById('toate');if(h)h.scrollIntoView()},1200)}
+ R.querySelectorAll('[data-car]').forEach(skel);
+ var bySort=function(a,b){return b.p-a.p};
+ var KEY='ffxh_d1',C=null;try{C=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+ var fresh=function(){return Promise.all(Object.keys(PARTS).map(function(k){return api(PARTS[k])})).then(function(res){if(res.some(function(r){return r.length})){try{localStorage.setItem(KEY,JSON.stringify({t:Date.now(),r:res}))}catch(e){}}return res})};
+ var ALL=null,RID=(R.closest('[id^=rec]')||{id:'rec0'}).id.slice(3),SQ=0;
+ var fold=function(x){return String(x||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')};
+ var stock=function(p){return +p.quantity!==0||p.quantity===''};
+ function find(q){return fetch('https://store.tildaapi.one/api/getproductslist/?storepartuid=170600784142&recid='+RID+'&c='+Date.now()+'&getoptions=false&slice=1&size=100&filters%5Bquery%5D='+encodeURIComponent(q)).then(function(r){return r.json()}).then(function(j){return (j.products||[]).filter(stock).map(norm)}).catch(function(){return null})}
+ var FX='https://fastfixexpert.github.io/fastfix-search/';
+ function eng(){if(window.FFXSearch)return FFXSearch.load();return new Promise(function(res){var e=document.createElement('script');e.src=FX+'ffx-search.js';e.setAttribute('data-index',FX+'ffx-search-index.json');e.onload=function(){window.FFXSearch?FFXSearch.load().then(res):res(false)};e.onerror=function(){res(false)};document.head.appendChild(e);setTimeout(function(){res(false)},8000)})}
+ function doSearch(q){q=String(q||'').trim();if(!q)return;var n=++SQ,ss=R.querySelector('[data-sres]'),h=ss.querySelector('h3');ss.hidden=false;h.textContent=T('_sr','Caut')+' „'+q+'”…';var o=ss.querySelector('.ffxh__car');if(o)o.remove();
+  setTimeout(function(){ss.scrollIntoView({block:'start'})},300);
+  var show=function(l,tot,note){if(n!==SQ)return;h.textContent=l.length?T('_rf','Rezultate pentru')+' „'+q+'”: '+PL(tot)+(note||''):T('_nf','Nu am găsit produse pentru')+' „'+q+'”';if(l.length)grid(ss,l)};
+  eng().then(function(ok){
+   if(ok){var r=FFXSearch.search(q,{limit:100}),fx=Object.keys(r.fixes||{}).map(function(k){return r.fixes[k]}),note='';
+    if(r.layout)note=' ('+T('_lay','tastatura era pe altă limbă')+')';else if(fx.length)note=' ('+T('_fix','am corectat:')+' '+fx.join(', ')+')';else if(r.approx)note=' ('+T('_apx','potriviri apropiate')+')';
+    return show(r.items,r.total,note)}
+   find(q).then(function(l){var ws=fold(q).split(/\s+/).filter(Boolean),seen={},hit=function(p){return ws.every(function(x){return fold(p.t+' '+p.sku).indexOf(x)>-1})};
+    if(l===null)l=(ALL||[]).filter(hit);else{var st=l.filter(hit);if(st.length)l=st}
+    l=l.filter(function(p){if(seen[p.uid])return false;seen[p.uid]=1;return true});show(l,l.length)})})}
+ if(!window.FFXSearch)setTimeout(function(){document.querySelectorAll('.ffx-search input').forEach(function(i){i.addEventListener('focus',eng,{once:true})})},500);
+ window.ffxStoreSearch=function(q){q=String(q||'').trim();if(!q)return false;doSearch(q);try{var u=new URLSearchParams(location.search);u.set('q',q);Object.keys(Object.fromEntries(u)).forEach(function(k){if(/^tfc_/.test(k))u.delete(k)});history.replaceState(null,'',location.pathname+'?'+u.toString())}catch(e){}document.querySelectorAll('.ffx-search input').forEach(function(i){i.value=q});return true};
+ var Q0=(new URLSearchParams(location.search).get('q')||'').trim();if(Q0)doSearch(Q0);
+ var src=(C&&C.r&&Date.now()-C.t<216e5)?(setTimeout(fresh,4000),Promise.resolve(C.r)):fresh();
+ src.then(function(res){
+  var D={};Object.keys(PARTS).forEach(function(k,i){D[k]=res[i]});
+  var all=[].concat(D.gaming,D.laptopuri,D.birou,D.periferice);
+  ALL=all;
+  R.querySelectorAll('.ffxh__br a[data-b]').forEach(function(a){var b=a.textContent.trim(),re=new RegExp('(^|[^a-z])'+b+'([^a-z]|$)','i');var l=all.filter(function(p){return re.test(p.t)});if(!l.length){a.style.display='none';return}
+   a.onclick=function(e){e.preventDefault();var s=R.querySelector('[data-bres]');s.hidden=false;s.querySelector('h3').textContent=b+' · '+PL(l.length);carousel(s,l);R.querySelectorAll('.ffxh__br a').forEach(function(x){x.classList.toggle('on',x===a)});s.scrollIntoView({behavior:'smooth',block:'nearest'})}});
+  D.deals=all.filter(function(p){return p.o>p.p}).sort(function(a,b){return (b.o-b.p)-(a.o-a.p)});
+  var cnt=PL;
+  R.querySelectorAll('[data-cnt]').forEach(function(e){var l=D[e.dataset.cnt]||[];e.textContent=l.length?cnt(l.length):''});
+  R.querySelectorAll('[data-min]').forEach(function(e){var l=(D[e.dataset.min]||[]).map(function(p){return p.p}).filter(Boolean);e.textContent=l.length?fmt(Math.min.apply(0,l))+' '+LEI:''});
+  var pick=function(l,f){return l.filter(f||function(){return 1})};
+  var g=D.gaming.slice().sort(bySort);
+  var heroImgs={gaming:[g[Math.min(3,g.length-1)],g[0],g[Math.min(6,g.length-1)]],laptopuri:pick(D.laptopuri,function(p){return /RTX|Legion|Katana|Nitro|ROG|TUF/i.test(p.t)}).slice(0,1).concat(pick(D.laptopuri,function(p){return /XPS|Zenbook|Surface|MacBook/i.test(p.t)}).slice(0,2)),deal:D.deals.slice(0,1),trade:[g[2],(D.laptopuri[5])]};
+  var hl=heroImgs.laptopuri;if(hl.length===3)heroImgs.laptopuri=[hl[1],hl[0],hl[2]];
+  var put=function(key,list){var e=R.querySelector('[data-hero='+key+']');if(e)list.filter(Boolean).forEach(function(p){var i=new Image();i.decoding='async';i.src=TH(p.img,600);i.alt='';e.appendChild(i)})};
+  ['laptopuri','deal'].forEach(function(k){put(k,heroImgs[k])});
+  Promise.all(g.slice(0,12).map(cutout)).then(function(ok){var c=g.slice(0,12).filter(function(p,j){return ok[j]});if(c.length<3)c=g.slice(0,3);put('gaming',[c[1],c[0],c[2]]);put('trade',[c[3]||c[2],D.laptopuri[5]])});
+  var tile={gaming:g[1],laptopuri:D.laptopuri[2],birou:D.birou[0],periferice:pick(D.periferice,function(p){return /gaming|căști|casti/i.test(p.t)})[0]||D.periferice[0],rate:pick(D.laptopuri,function(p){return /XPS|Surface/i.test(p.t)})[0]};
+  R.querySelectorAll('[data-tile]').forEach(function(e){var p=tile[e.dataset.tile];if(p)e.src=TH(p.img,300);else e.remove()});
+  var d=D.deals[0];if(d){var q=function(k){return R.querySelector('[data-deal='+k+']')};q('t').textContent=d.t.split('|')[0].trim();q('p').textContent=fmt(d.p)+' '+LEI;q('o').textContent=fmt(d.o)+' '+LEI;q('u').href=d.u;q('pct').textContent='−'+Math.round((1-d.p/d.o)*100)+'%'}
+  else{var s=R.querySelector('.ffxh__s.d');s&&s.remove();build()}
+  var lap=function(f){return D.laptopuri.filter(f==='nou'?function(p){return /^nou/i.test(p.m)}:f==='second'?function(p){return !/^nou/i.test(p.m)}:function(p){return /RTX|Radeon RX/i.test(p.t)})};
+  R.querySelectorAll('[data-car]').forEach(function(sec){var k=sec.dataset.car;carousel(sec,k==='laptopuri'?lap('nou'):D[k]||[])});
+  R.querySelectorAll('.ffxh__tabs button').forEach(function(b){b.onclick=function(){b.parentNode.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-selected',x===b)});carousel(b.closest('[data-car]'),lap(b.dataset.f))}});
+ });
+ var H=document.getElementById('ffxh-hero'),TRK=document.getElementById('ffxh-tr'),DT=document.getElementById('ffxh-d'),i=0,tm,N;
+ function go(k,u){i=(k+N)%N;TRK.style.transform='translateX('+(-100*i)+'%)';[].forEach.call(DT.children,function(d,j){d.setAttribute('aria-current',j===i)});if(u)start()}
+ function start(){clearInterval(tm);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)tm=setInterval(function(){go(i+1)},5500)}
+ function build(){N=TRK.children.length;DT.innerHTML='';for(var k=0;k<N;k++){var b=document.createElement('button');b.setAttribute('aria-label',(k+1)+'/'+N);b.onclick=(function(k){return function(){go(k,1)}})(k);DT.appendChild(b)}go(Math.min(i,N-1))}
+ build();start();window.__ffxgo=go;window.__ffxstop=function(){clearInterval(tm)};
+ document.getElementById('ffxh-p').onclick=function(){go(i-1,1)};document.getElementById('ffxh-n').onclick=function(){go(i+1,1)};
+ H.addEventListener('mouseenter',function(){clearInterval(tm)});H.addEventListener('mouseleave',start);
+ var x0=null;H.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});H.addEventListener('touchend',function(e){if(x0===null)return;var dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)go(i+(dx<0?1:-1),1)});
+})();
+</script>
