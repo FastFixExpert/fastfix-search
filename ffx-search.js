@@ -69,6 +69,12 @@
     xmi: ['xiaomi', 'ksiaomi', 'siaomi', 'ksiomi'],
     wls: ['wireless', 'fara fir', 'bezprovodnoi', 'besprovodnoi', 'besprovodnaia', 'besprovodnye', 'besprovodnyi', 'tws', 'bluetooth']
   };
+  // categorii pentru filtrele de pe pagina de rezultate: cod -> [RO, RU]
+  var CAT = { lap: ['Laptopuri', 'Ноутбуки'], pc: ['Calculatoare', 'Компьютеры'], mon: ['Monitoare', 'Мониторы'], gpu: ['Plăci video', 'Видеокарты'], cpu: ['Procesoare', 'Процессоры'],
+    ram: ['Memorie RAM', 'Оперативная память'], mb: ['Plăci de bază', 'Материнские платы'], ssd: ['SSD', 'SSD'], hdd: ['HDD', 'HDD'], psu: ['Surse de alimentare', 'Блоки питания'],
+    cas: ['Carcase', 'Корпуса'], fan: ['Răcire', 'Охлаждение'], tpa: ['Pastă termică', 'Термопаста'], mou: ['Mouse', 'Мыши'], kbd: ['Tastaturi', 'Клавиатуры'], hph: ['Căști', 'Наушники'],
+    spk: ['Boxe', 'Колонки'], cam: ['Camere web', 'Веб-камеры'], mic: ['Microfoane', 'Микрофоны'], pad: ['Gamepad-uri', 'Геймпады'], prn: ['Imprimante', 'Принтеры'], ups: ['UPS', 'ИБП'],
+    rtr: ['Rețea', 'Сетевое'], tv: ['Televizoare', 'Телевизоры'], cbl: ['Cabluri', 'Кабели'], alt: ['Altele', 'Другое'] };
   var PH = [];                // [variantă, cod] sortate după lungime (cele lungi primele)
   Object.keys(SYN).forEach(function (k) { SYN[k].forEach(function (v) { PH.push([v, k]); }); });
   PH.sort(function (a, b) { return b[0].length - a[0].length; });
@@ -116,6 +122,8 @@
       var p = { uid: r[0], t: r[1], sku: r[2] || '', p: r[3] || 0, o: r[4] || 0, img: r[5] ? (r[5].charAt(0) === '~' ? CDN + r[5].slice(1) : r[5]) : '', u: r[6] && r[6].charAt(0) === '/' ? location.origin + r[6] : r[6], m: r[7] || '', b: r[8] || '', x: r[9] || '' };
       P.push(p);
       var n = base(p.t), st = synTokens(n);
+      var cs = st.syn.filter(function (x) { return CAT[x.c.slice(1)]; }).sort(function (x, y) { return x.pos - y.pos; });
+      p.c = cs.length && cs[0].pos < 4 ? cs[0].c.slice(1) : (p.x && (cs = synTokens(base(p.x)).syn.filter(function (x) { return CAT[x.c.slice(1)]; })).length ? cs[0].c.slice(1) : (cs.length ? cs[0].c.slice(1) : 'alt'));
       n.split(' ').forEach(function (tk, i) { if (tk) add(tk, id, i < 3 ? 3 : 2); });
       st.syn.forEach(function (s) { add(s.c, id, s.pos < 3 ? 3 : 1); });
       if (p.b) base(p.b).split(' ').forEach(function (tk) { if (tk) add(tk, id, 2); });
@@ -254,7 +262,7 @@
   }
   function scan() { css(); document.querySelectorAll('form.ffx-search input[name=q]').forEach(attach); }
 
-  window.FFXSearch = { load: load, search: search, base: base, _build: build };
+  window.FFXSearch = { load: load, search: search, base: base, cats: CAT, _build: build };
   // în afara /catalog, bara de sus caută mereu în tot magazinul (nu doar în categoria curentă)
   function global() { if (!/^\/catalog\/?$/.test(location.pathname)) window.ffxStoreSearch = function () { return false; }; }
   if (document.readyState !== 'loading') global(); else document.addEventListener('DOMContentLoaded', global);
