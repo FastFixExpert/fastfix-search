@@ -228,7 +228,7 @@
     if (inp.__ffxs) return; inp.__ffxs = 1;
     var box = document.createElement('div'), sel = -1, tm, form = inp.form;
     box.className = 'ffxs'; box.hidden = true; document.body.appendChild(box);
-    function place() { var r = (form || inp).getBoundingClientRect(), iw = document.documentElement.clientWidth || innerWidth, w = Math.min(Math.max(r.width, 340), 440, iw - 16); box.style.width = w + 'px'; box.style.left = Math.max(8, Math.min(r.left, iw - w - 8)) + 'px'; box.style.top = (r.bottom + 6) + 'px'; box.style.maxHeight = Math.max(200, innerHeight - r.bottom - 16) + 'px'; }
+    function place() { var r = (form || inp).getBoundingClientRect(), iw = document.documentElement.clientWidth || innerWidth, w = Math.min(Math.max(r.width, 340), 440, iw - 16); box.style.width = w + 'px'; box.style.fontFamily = getComputedStyle(inp).fontFamily; box.style.left = Math.max(8, Math.min(r.left, iw - w - 8)) + 'px'; box.style.top = (r.bottom + 6) + 'px'; box.style.maxHeight = Math.max(200, innerHeight - r.bottom - 16) + 'px'; }
     function show() {
       var q = inp.value.trim(); sel = -1;
       if (q.length < 2) { box.hidden = true; return; }
