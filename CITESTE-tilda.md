@@ -50,3 +50,9 @@ Nu găsește: „iphone” (nu sunt telefoane în magazin).
 - Pagina de rezultate are butoane de categorie (max 12 + „Altele”, cu numărul de produse) și sortare: Cele mai potrivite / Preț crescător / Preț descrescător / Cu reducere. RU tradus. Pe telefon butoanele se derulează orizontal, sortarea pe toată lățimea.
 - Categoria produsului: tipul din titlu (primele 2 cuvinte) → caracteristica „Tip” → „Categorie” → textul „Tip”. Indexul are acum și coloana tip (r[10]).
 - Bloc /catalog sha1 b3302bf3… (repo ab96f2a), publicat și verificat live; ffx-search.js repo e91a9e2.
+
+## 2026-11-15 ~16:30 UTC – filtre pe parametri + pagini (la cererea ION)
+- Rezultate: preț de la/până la, butoane de parametri (cei care apar în rezultatele curente: Brand, Stare, Procesor, Memorie RAM, Stocare, Placă video, Diagonală, Rezoluție, Frecvență ecran…, max 8) cu liste de bife și numărul de produse, „Resetează filtrele”.
+- Pagini 1/2/3 (30 produse pe pagină), numărul de pagini după rezultatele filtrate; titlul arată „pagina X/Y”.
+- Indexul: r[11] = caracteristici {titlu: valoare} (fără Tip/Categorie), brand din „Producător” sau din lista de branduri a filtrului Tilda găsită în titlu (4.031/4.068 au brand).
+- Bloc /catalog sha1 89cb35d5… (repo 54058d2), publicat, verificat live RO/RU.
