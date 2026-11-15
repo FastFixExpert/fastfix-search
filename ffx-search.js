@@ -50,7 +50,7 @@
     mou: ['mouse', 'mausi', 'mysh', 'myshka', 'myshki'],
     kbd: ['tastatura', 'tastaturi', 'keyboard', 'klaviatura', 'klaviatury'],
     hph: ['casti', 'casca', 'intraaurale', 'circumaurale', 'supra aurale', 'earbuds', 'headset', 'headphones', 'naushniki', 'garnitura'],
-    prn: ['imprimanta', 'imprimante', 'printer', 'printery', 'multifunctionala', 'mfu'],
+    prn: ['imprimanta', 'imprimante', 'monocrom', 'printer', 'printery', 'multifunctionala', 'mfu'],
     ups: ['ups', 'neintreruptibila', 'ibp', 'bespereboinik'],
     rtr: ['router', 'routere', 'ruter', 'marshrutizator'],
     tv: ['televizor', 'televizoare', 'televizor', 'tv'],
