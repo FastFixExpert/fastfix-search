@@ -218,7 +218,7 @@
   function css() {
     if (document.getElementById('ffxs-css')) return;
     var st = document.createElement('style'); st.id = 'ffxs-css';
-    st.textContent = '.ffxs{position:absolute;z-index:100000;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.14);font-family:inherit;font-size:14px;line-height:1.3;color:#111;max-height:70vh;overflow-y:auto}' +
+    st.textContent = '.ffxs{position:fixed;z-index:100000;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.14);font-family:inherit;font-size:14px;line-height:1.3;color:#111;max-height:70vh;overflow-y:auto}' +
       '.ffxs a{display:flex;gap:10px;align-items:center;padding:8px 12px;color:#111!important;text-decoration:none!important}.ffxs a:hover,.ffxs a.on{background:#f4f4f4}' +
       '.ffxs img{width:44px;height:44px;object-fit:contain;flex:none;border-radius:6px;background:#fff}.ffxs span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}' +
       '.ffxs b{white-space:nowrap;font-weight:700}.ffxs .ffxs__all{justify-content:center;font-weight:700;border-top:1px solid #eee;color:#E5352B!important}.ffxs .ffxs__nf{padding:12px;color:#666}';
@@ -228,7 +228,7 @@
     if (inp.__ffxs) return; inp.__ffxs = 1;
     var box = document.createElement('div'), sel = -1, tm, form = inp.form;
     box.className = 'ffxs'; box.hidden = true; document.body.appendChild(box);
-    function place() { var r = (form || inp).getBoundingClientRect(); box.style.left = (r.left + scrollX) + 'px'; box.style.top = (r.bottom + scrollY + 6) + 'px'; box.style.width = Math.max(r.width, Math.min(420, innerWidth - 24)) + 'px'; if (r.left + box.offsetWidth > innerWidth - 8) box.style.left = Math.max(8, innerWidth - box.offsetWidth - 8 + scrollX) + 'px'; }
+    function place() { var r = (form || inp).getBoundingClientRect(), iw = document.documentElement.clientWidth || innerWidth, w = Math.min(Math.max(r.width, 340), 440, iw - 16); box.style.width = w + 'px'; box.style.left = Math.max(8, Math.min(r.left, iw - w - 8)) + 'px'; box.style.top = (r.bottom + 6) + 'px'; box.style.maxHeight = Math.max(200, innerHeight - r.bottom - 16) + 'px'; }
     function show() {
       var q = inp.value.trim(); sel = -1;
       if (q.length < 2) { box.hidden = true; return; }
@@ -237,7 +237,7 @@
         var RU = isRU(), TX = RU ? TXT.ru : TXT.ro, r = search(q, { limit: 6 }), url = '/catalog?q=' + encodeURIComponent(q) + (RU ? '&lang=ru' : '');
         box.innerHTML = r.items.length ? r.items.map(function (p) { return '<a href="' + esc(p.u) + '"><img src="' + esc(TH(p.img, 100)) + '" alt="" loading="lazy"><span>' + esc(p.t) + '</span><b>' + fmt(p.p) + ' ' + TX.lei + '</b></a>'; }).join('') +
           '<a class="ffxs__all" href="' + url + '">' + TX.all + ' (' + r.total + ') →</a>' : '<div class="ffxs__nf">' + TX.nf + '</div>';
-        place(); box.hidden = false;
+        box.hidden = false; place();
       });
     }
     inp.addEventListener('focus', function () { load(); if (inp.value.trim().length > 1) show(); });
@@ -250,6 +250,7 @@
     });
     document.addEventListener('click', function (e) { if (e.target !== inp && !box.contains(e.target)) box.hidden = true; });
     addEventListener('resize', function () { if (!box.hidden) place(); });
+    addEventListener('scroll', function () { if (!box.hidden) place(); }, { passive: true });
   }
   function scan() { css(); document.querySelectorAll('form.ffx-search input[name=q]').forEach(attach); }
 
