@@ -2,7 +2,7 @@
 
 Citește API-ul public al magazinului Tilda (toate produsele din secțiunea „toate”),
 păstrează doar produsele în stoc și scrie un index compact:
-  {"v":1,"n":<nr>,"p":[[uid,titlu,sku,pret,pret_vechi,poza,url,eticheta,brand,extra,tip], ...]}
+  {"v":1,"n":<nr>,"p":[[uid,titlu,sku,pret,pret_vechi,poza,url,eticheta,brand,extra,tip,{caracteristica:valoare}], ...]}
 Rulare: python build_index.py [fișier_ieșire]
 """
 import json, sys, time, urllib.request, urllib.parse
@@ -31,6 +31,33 @@ def page(n, size=500):
             time.sleep(5 * (i + 1))
 
 
+BRANDS = []                # lista de branduri din filtrul „Brand” al catalogului (pentru produsele fără „Producător”)
+SKIP_CH = {"tip", "categorie", "тип", "категория"}
+
+
+def brands():
+    q = urllib.parse.urlencode({"storepartuid": PART, "recid": REC})
+    try:
+        with urllib.request.urlopen(urllib.request.Request(API.replace("getproductslist", "getfilters") + "?" + q,
+                                    headers={"User-Agent": "ffx-search-index/1", "Referer": SITE + "/catalog"}), timeout=60) as r:
+            f = json.load(r)
+        for x in f.get("filters") or []:
+            if x.get("name") == "brand":
+                return sorted({v["value"] for v in x.get("values") or [] if len(v.get("value", "")) > 1}, key=len, reverse=True)
+    except Exception:
+        pass
+    return []
+
+
+def brand_in_title(t):
+    low = " " + t.lower() + " "
+    for b in BRANDS:
+        i = low.find(b.lower())
+        if i > -1 and not low[i - 1].isalnum() and not low[i + len(b)].isalnum():
+            return b
+    return ""
+
+
 def row(p):
     try:
         g = json.loads(p.get("gallery") or "[]")
@@ -43,11 +70,14 @@ def row(p):
     if url.startswith(SITE):
         url = url[len(SITE):]
     brand, extra, tip = "", [], ""
+    ch = {}
     for c in p.get("characteristics") or []:
         k = (c.get("title") or "").strip().lower()
         v = (c.get("value") or "").strip()
         if not v:
             continue
+        if k not in SKIP_CH and v != "-" and len(ch) < 12:
+            ch[(c.get("title") or "").strip()[:30]] = v[:40]
         if k in BRAND_KEYS and not brand:
             brand = v
         elif k in EXTRA_KEYS:
@@ -56,10 +86,11 @@ def row(p):
                 tip = v
     num = lambda x: round(float(x)) if x not in (None, "") else 0
     return [str(p["uid"]), p.get("title", "").strip(), p.get("sku") or "", num(p.get("price")),
-            num(p.get("priceold")), img, url, (p.get("mark") or "").strip(), brand, " ".join(extra)[:80], tip[:60]]
+            num(p.get("priceold")), img, url, (p.get("mark") or "").strip(), brand or brand_in_title(p.get("title", "")), " ".join(extra)[:80], tip[:60], ch]
 
 
 def main(out):
+    BRANDS[:] = brands()
     rows, seen, n, total = [], set(), 1, None
     while True:
         j = page(n)

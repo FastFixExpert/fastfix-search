@@ -119,7 +119,7 @@
   function build(data) {
     P = []; INV = {};
     (data.p || []).forEach(function (r, id) {
-      var p = { uid: r[0], t: r[1], sku: r[2] || '', p: r[3] || 0, o: r[4] || 0, img: r[5] ? (r[5].charAt(0) === '~' ? CDN + r[5].slice(1) : r[5]) : '', u: r[6] && r[6].charAt(0) === '/' ? location.origin + r[6] : r[6], m: r[7] || '', b: r[8] || '', x: r[9] || '', tp: r[10] || '' };
+      var p = { uid: r[0], t: r[1], sku: r[2] || '', p: r[3] || 0, o: r[4] || 0, img: r[5] ? (r[5].charAt(0) === '~' ? CDN + r[5].slice(1) : r[5]) : '', u: r[6] && r[6].charAt(0) === '/' ? location.origin + r[6] : r[6], m: r[7] || '', b: r[8] || '', x: r[9] || '', tp: r[10] || '', ch: r[11] || {} };
       P.push(p);
       var n = base(p.t), st = synTokens(n);
       // categoria: tipul din titlu (primele 2 cuvinte) -> caracteristica „Tip” (primul cuvânt) -> „Categorie” (dacă Tip nu e un accesoriu) -> textul „Tip”
