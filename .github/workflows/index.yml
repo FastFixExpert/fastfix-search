@@ -1,0 +1,27 @@
+name: Index căutare fastfix.md
+on:
+  schedule:
+    - cron: "30 4,10,16 * * *"   # de 3 ori pe zi (după sincronizarea western de la 06:00 ora Chișinăului)
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [build_index.py, .github/workflows/index.yml]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generează indexul
+        run: python build_index.py ffx-search-index.json
+      - name: Salvează dacă s-a schimbat
+        run: |
+          git config user.name "ffx-bot"
+          git config user.email "ffx-bot@users.noreply.github.com"
+          git add ffx-search-index.json
+          git diff --cached --quiet || git commit -m "Index căutare actualizat"
+          git push
