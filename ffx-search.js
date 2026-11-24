@@ -313,7 +313,7 @@
     if (!h || h.getAttribute('data-ffx-sticky')) return;
     h.setAttribute('data-ffx-sticky', '1');
     css();
-    var rec = h.closest('.r') || h.parentElement, on = false, full = 0, raf = 0, lastH = '';
+    var rec = h.closest('.r') || h.parentElement, on = false, full = 0, lastH = '';
     function setH(v) { if (v !== lastH) { lastH = v; H.style.setProperty('--ffx-sticky-h', v); } }
     var burger = h.querySelector('.ffx-burger'), dr = h.querySelector('.ffx-drawer'), tools = h.querySelector('.ffx-tools');
     // buton de căutare pentru antetul compact pe telefon: deschide meniul și pune cursorul în bara de căutare
@@ -336,8 +336,8 @@
       if (v) { rec.style.minHeight = full + 'px'; H.classList.add('ffx-stuck'); setH(h.offsetHeight + 'px'); }
       else { H.classList.remove('ffx-stuck'); rec.style.minHeight = ''; setH('0px'); }
     }
+    // rulează direct pe scroll (browserul trimite cel mult un scroll pe cadru; verificarea e o singură citire de poziție)
     function check() {
-      raf = 0;
       if (H.classList.contains('ffx-lock')) return; // meniul e deschis: nu schimbăm nimic
       if (!on) full = h.offsetHeight;
       var bottom = rec.getBoundingClientRect().top + full;
@@ -346,12 +346,11 @@
       else if (on && bottom > h.offsetHeight) set(false);
       else if (on) setH(h.offsetHeight + 'px');
     }
-    function tick() { if (!raf) raf = requestAnimationFrame(check); }
-    addEventListener('scroll', tick, { passive: true });
+    addEventListener('scroll', check, { passive: true });
     // doar o schimbare de lățime re-măsoară antetul (pe telefon bara browserului apare/dispare la derulare și dă resize pe înălțime)
     var lastW = innerWidth;
-    addEventListener('resize', function () { if (innerWidth === lastW) return; lastW = innerWidth; set(false); full = h.offsetHeight; tick(); });
-    addEventListener('load', function () { if (!on) full = h.offsetHeight; tick(); });
+    addEventListener('resize', function () { if (innerWidth === lastW) return; lastW = innerWidth; set(false); full = h.offsetHeight; check(); });
+    addEventListener('load', check);
     check();
   }
   if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
