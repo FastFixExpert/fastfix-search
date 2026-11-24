@@ -272,3 +272,88 @@
   if (document.readyState !== 'loading') scan(); else document.addEventListener('DOMContentLoaded', scan);
   setTimeout(scan, 1500);
 })();
+
+
+/* FFX antet fix la derulare v1 — fastfix.md
+   Când antetul (.ffx-hdr) iese din ecran la derulare, rămâne prins sus într-o variantă compactă:
+   desktop = rândul principal (logo, Reparații/Magazin, linkuri, căutare, favorite, coș, „Cheamă meșterul”);
+   telefon/tabletă (<=960px) = meniu ☰, logo, căutare (deschide meniul cu bara de căutare), favorite, coș.
+   Filtrele catalogului Tilda rămân și ele la vedere: pe desktop coloana din stânga se lipește sub antet (cu derulare proprie),
+   pe telefon bara „Filtre / sortare / căutare” rămâne sub antet.
+   Locul antetului rămâne rezervat (min-height pe record), deci conținutul nu sare și nu e acoperit.
+   Revine la antetul întreg când pagina e derulată înapoi sus. Oprire rapidă: window.FFX_NO_STICKY = true înainte de script. */
+(function () {
+  if (window.FFXSticky || window.FFX_NO_STICKY) return;
+  window.FFXSticky = true;
+  var H = document.documentElement, st;
+  function css() {
+    if (st) return;
+    st = document.createElement('style'); st.id = 'ffx-sticky-css';
+    st.textContent =
+      'html.ffx-stuck .ffx-hdr{position:fixed!important;top:0;left:0;right:0;z-index:990;box-shadow:0 4px 18px rgba(17,17,17,.10);animation:ffxStIn .22s ease}' +
+      '@keyframes ffxStIn{from{transform:translateY(-100%)}to{transform:none}}' +
+      'html.ffx-stuck .ffx-hdr .ffx-top,html.ffx-stuck .ffx-hdr .ffx-sub{display:none!important}' +
+      'html.ffx-stuck .ffx-hdr .ffx-main__in{padding-top:8px;padding-bottom:8px}' +
+      'html.ffx-stuck .ffx-hdr .ffx-logo img{height:40px}' +
+      '.ffx-hdr .ffx-sbtn{display:none!important}' +
+      '@media (max-width:960px){' +
+        'html.ffx-stuck .ffx-hdr .ffx-sec,html.ffx-stuck .ffx-hdr .ffx-br,html.ffx-stuck .ffx-hdr a.ffx-cta--m{display:none!important}' +
+        'html.ffx-stuck .ffx-hdr .ffx-sbtn{display:flex!important}' +
+        'html.ffx-stuck .ffx-hdr .ffx-logo img{height:clamp(30px,9vw,36px)}' +
+      '}' +
+      /* filtrele catalogului Tilda (t-catalog): --ffx-sticky-h = înălțimea antetului prins (0 când nu e prins) */
+      '@media (min-width:961px){.t-catalog__sidebar .js-sidebar-filters{position:sticky;top:calc(var(--ffx-sticky-h,0px) + 12px);max-height:calc(100vh - var(--ffx-sticky-h,0px) - 24px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;transition:top .22s ease}}' +
+      '@media (max-width:960px){.t-catalog__sidebar.t-catalog__filter-wrapper{position:sticky;top:var(--ffx-sticky-h,0px);z-index:980;background:#FFFFFF;margin-left:-20px;margin-right:-20px;margin-bottom:12px;padding:8px 20px;box-shadow:0 1px 0 #E5E5E5;transition:top .22s ease}' +
+        '.t-catalog__sidebar.t-catalog__filter-wrapper>.js-sidebar-filters>.t-catalog__filter{padding-bottom:0}}' +
+      '@media (prefers-reduced-motion:reduce){html.ffx-stuck .ffx-hdr{animation:none}.t-catalog__sidebar .js-sidebar-filters,.t-catalog__sidebar.t-catalog__filter-wrapper{transition:none}}';
+    (document.head || H).appendChild(st);
+  }
+  function init() {
+    var h = document.querySelector('.ffx-hdr');
+    if (!h || h.getAttribute('data-ffx-sticky')) return;
+    h.setAttribute('data-ffx-sticky', '1');
+    css();
+    var rec = h.closest('.r') || h.parentElement, on = false, full = 0, raf = 0, lastH = '';
+    function setH(v) { if (v !== lastH) { lastH = v; H.style.setProperty('--ffx-sticky-h', v); } }
+    var burger = h.querySelector('.ffx-burger'), dr = h.querySelector('.ffx-drawer'), tools = h.querySelector('.ffx-tools');
+    // buton de căutare pentru antetul compact pe telefon: deschide meniul și pune cursorul în bara de căutare
+    if (burger && dr && tools && dr.querySelector('.ffx-search input')) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'ffx-ico ffx-sbtn';
+      b.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
+      var lab = function () { b.setAttribute('aria-label', /^ru/i.test(H.getAttribute('data-ffx-lang') || H.lang || '') ? 'Поиск' : 'Caută'); };
+      lab();
+      b.addEventListener('click', function () {
+        if (dr.hasAttribute('hidden')) burger.click();
+        setTimeout(function () { var i = dr.querySelector('.ffx-search input'); if (i) i.focus(); }, 60);
+      });
+      b.addEventListener('focus', lab);
+      tools.insertBefore(b, tools.firstChild);
+    }
+    function set(v) {
+      if (v === on) return;
+      on = v;
+      if (v) { rec.style.minHeight = full + 'px'; H.classList.add('ffx-stuck'); setH(h.offsetHeight + 'px'); }
+      else { H.classList.remove('ffx-stuck'); rec.style.minHeight = ''; setH('0px'); }
+    }
+    function check() {
+      raf = 0;
+      if (H.classList.contains('ffx-lock')) return; // meniul e deschis: nu schimbăm nimic
+      if (!on) full = h.offsetHeight;
+      var bottom = rec.getBoundingClientRect().top + full;
+      // prinde când antetul a ieșit complet; eliberează când se vede mai mult decât bara compactă
+      if (!on && bottom <= 0) set(true);
+      else if (on && bottom > h.offsetHeight) set(false);
+      else if (on) setH(h.offsetHeight + 'px');
+    }
+    function tick() { if (!raf) raf = requestAnimationFrame(check); }
+    addEventListener('scroll', tick, { passive: true });
+    // doar o schimbare de lățime re-măsoară antetul (pe telefon bara browserului apare/dispare la derulare și dă resize pe înălțime)
+    var lastW = innerWidth;
+    addEventListener('resize', function () { if (innerWidth === lastW) return; lastW = innerWidth; set(false); full = h.offsetHeight; tick(); });
+    addEventListener('load', function () { if (!on) full = h.offsetHeight; tick(); });
+    check();
+  }
+  if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
+  setTimeout(init, 1500);
+})();
