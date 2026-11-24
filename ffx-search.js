@@ -276,7 +276,7 @@
 
 /* FFX antet fix la derulare v1 — fastfix.md
    Când antetul (.ffx-hdr) iese din ecran la derulare, rămâne prins sus într-o variantă compactă:
-   desktop = rândul principal (logo, Reparații/Magazin, linkuri, căutare, favorite, coș, „Cheamă meșterul”);
+   desktop = bara neagră (telefon, adresă, limbă) + rândul principal (logo, Reparații/Magazin, linkuri, căutare, favorite, coș, „Cheamă meșterul”);
    telefon/tabletă (<=960px) = meniu ☰, logo, căutare (deschide meniul cu bara de căutare), favorite, coș.
    Filtrele catalogului Tilda rămân și ele la vedere: pe desktop coloana din stânga se lipește sub antet (cu derulare proprie),
    pe telefon bara „Filtre / sortare / căutare” rămâne sub antet.
@@ -292,7 +292,7 @@
     st.textContent =
       'html.ffx-stuck .ffx-hdr{position:fixed!important;top:0;left:0;right:0;z-index:990;box-shadow:0 4px 18px rgba(17,17,17,.10);animation:ffxStIn .22s ease}' +
       '@keyframes ffxStIn{from{top:-90px}to{top:0}}' +
-      'html.ffx-stuck .ffx-hdr .ffx-top,html.ffx-stuck .ffx-hdr .ffx-sub{display:none!important}' +
+      'html.ffx-stuck .ffx-hdr .ffx-sub{display:none!important}' +
       'html.ffx-stuck .ffx-hdr .ffx-main__in{padding-top:8px;padding-bottom:8px}' +
       'html.ffx-stuck .ffx-hdr .ffx-logo img{height:40px}' +
       '.ffx-hdr .ffx-sbtn{display:none!important}' +
