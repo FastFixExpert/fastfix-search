@@ -291,7 +291,7 @@
     st = document.createElement('style'); st.id = 'ffx-sticky-css';
     st.textContent =
       'html.ffx-stuck .ffx-hdr{position:fixed!important;top:0;left:0;right:0;z-index:990;box-shadow:0 4px 18px rgba(17,17,17,.10);animation:ffxStIn .22s ease}' +
-      '@keyframes ffxStIn{from{transform:translateY(-100%)}to{transform:none}}' +
+      '@keyframes ffxStIn{from{top:-90px}to{top:0}}' +
       'html.ffx-stuck .ffx-hdr .ffx-top,html.ffx-stuck .ffx-hdr .ffx-sub{display:none!important}' +
       'html.ffx-stuck .ffx-hdr .ffx-main__in{padding-top:8px;padding-bottom:8px}' +
       'html.ffx-stuck .ffx-hdr .ffx-logo img{height:40px}' +
@@ -301,6 +301,7 @@
         'html.ffx-stuck .ffx-hdr .ffx-sbtn{display:flex!important}' +
         'html.ffx-stuck .ffx-hdr .ffx-logo img{height:clamp(30px,9vw,36px)}' +
       '}' +
+      /* animația mișcă „top”, nu „transform”: un transform ar prinde meniul lateral (position:fixed) în interiorul antetului */
       /* filtrele catalogului Tilda (t-catalog): --ffx-sticky-h = înălțimea antetului prins (0 când nu e prins) */
       '@media (min-width:961px){.t-catalog__sidebar .js-sidebar-filters{position:sticky;top:calc(var(--ffx-sticky-h,0px) + 12px);max-height:calc(100vh - var(--ffx-sticky-h,0px) - 24px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;transition:top .22s ease}}' +
       '@media (max-width:960px){.t-catalog__sidebar.t-catalog__filter-wrapper{position:sticky;top:var(--ffx-sticky-h,0px);z-index:980;background:#FFFFFF;margin-left:-20px;margin-right:-20px;margin-bottom:12px;padding:8px 20px;box-shadow:0 1px 0 #E5E5E5;transition:top .22s ease}' +
