@@ -357,3 +357,54 @@
   if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
   setTimeout(init, 1500);
 })();
+
+
+/* FFX avertisment preț/stoc v1 — fastfix.md
+   Un text scurt sub butonul „Adaugă în coș” pe pagina produsului și în coș (deasupra formularului de comandă):
+   site-ul e în lucru, prețul și stocul se confirmă la telefon, informațiile nu sunt ofertă publică.
+   Limba după data-ffx-lang / lang / ?lang=ru (ca restul scripturilor). Oprire rapidă: window.FFX_NO_NOTICE = true înainte de script. */
+(function () {
+  if (window.FFXNotice || window.FFX_NO_NOTICE) return;
+  window.FFXNotice = true;
+  var H = document.documentElement;
+  var TEL = '<a href="tel:+37378348348">(+373) 78 348 348</a>';
+  var TX = {
+    ro: '<b>Atenție:</b> site-ul este în curs de actualizare. Prețul și disponibilitatea în stoc sunt orientative și se confirmă telefonic la ' + TEL + ' înainte de comandă. Informațiile de pe site nu reprezintă o ofertă publică.',
+    ru: '<b>Внимание:</b> сайт находится в процессе обновления. Цена и наличие на складе указаны ориентировочно и уточняются по телефону ' + TEL + ' перед оформлением заказа. Информация на сайте не является публичной офертой.'
+  };
+  var ru = function () { return /^ru/i.test(H.getAttribute('data-ffx-lang') || H.lang || '') || /[?&]lang=ru/i.test(location.search); };
+  function css() {
+    if (document.getElementById('ffx-notice-css')) return;
+    var st = document.createElement('style'); st.id = 'ffx-notice-css';
+    st.textContent = '.ffx-notice{box-sizing:border-box;margin:14px 0 0;padding:10px 12px;background:#FFF8E5;border:1px solid #F2D58A;border-left:4px solid #E5A000;border-radius:8px;' +
+      'font-family:inherit;font-size:13px;line-height:1.45;color:#3D3420;text-align:left;max-width:560px}' +
+      '.ffx-notice b{font-weight:700}.ffx-notice a{color:#E5352B!important;font-weight:700;white-space:nowrap;text-decoration:none!important}' +
+      '.t706 .ffx-notice{margin:12px 0 16px;max-width:none}' +
+      '@media (max-width:640px){.ffx-notice{font-size:12.5px;padding:9px 10px}}';
+    (document.head || H).appendChild(st);
+  }
+  function put(after, before) {
+    var parent = (after || before).parentElement; if (!parent) return;
+    var n = after ? after.nextElementSibling : before.previousElementSibling;
+    var lang = ru() ? 'ru' : 'ro';
+    if (n && n.classList.contains('ffx-notice')) { if (n.getAttribute('data-l') !== lang) { n.innerHTML = TX[lang]; n.setAttribute('data-l', lang); } return; }
+    var d = document.createElement('div'); d.className = 'ffx-notice'; d.setAttribute('role', 'note'); d.setAttribute('data-l', lang); d.innerHTML = TX[lang];
+    parent.insertBefore(d, after ? after.nextSibling : before);
+  }
+  function scan() {
+    // pagina produsului (catalog nou t-catalog și magazinul vechi t-store), inclusiv fereastra produsului din catalog
+    document.querySelectorAll('.t-catalog__prod-popup__btn-wrapper,.t-store__prod-popup__btn-wrapper').forEach(function (b) { css(); put(b, null); });
+    // coșul: deasupra formularului de comandă
+    document.querySelectorAll('.t706__orderform').forEach(function (f) { css(); put(null, f); });
+  }
+  var tm;
+  function later() { clearTimeout(tm); tm = setTimeout(scan, 150); }
+  function init() {
+    scan();
+    if (window.MutationObserver) new MutationObserver(function (m) {
+      for (var i = 0; i < m.length; i++) if (m[i].addedNodes.length || m[i].type === 'attributes') { later(); return; }
+    }).observe(document.body, { childList: true, subtree: true });
+    if (window.MutationObserver) new MutationObserver(later).observe(H, { attributes: true, attributeFilter: ['lang', 'data-ffx-lang'] });
+  }
+  if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
+})();
