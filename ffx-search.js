@@ -362,9 +362,11 @@
 /* FFX avertisment preț/stoc v1 — fastfix.md
    Un text scurt sub butonul „Adaugă în coș” pe pagina produsului și în coș (deasupra formularului de comandă):
    site-ul e în lucru, prețul și stocul se confirmă la telefon, informațiile nu sunt ofertă publică.
-   Limba după data-ffx-lang / lang / ?lang=ru (ca restul scripturilor). Oprire rapidă: window.FFX_NO_NOTICE = true înainte de script. */
+   Limba după data-ffx-lang / lang / ?lang=ru (ca restul scripturilor).
+   PORNIT / OPRIT: schimbă AVERTISMENT_ACTIV de mai jos în false (și înapoi în true) și salvează; site-ul se actualizează în ~10 minute. */
+var AVERTISMENT_ACTIV = true;
 (function () {
-  if (window.FFXNotice || window.FFX_NO_NOTICE) return;
+  if (!AVERTISMENT_ACTIV || window.FFXNotice || window.FFX_NO_NOTICE) return;
   window.FFXNotice = true;
   var H = document.documentElement;
   var TEL = '<a href="tel:+37378348348">(+373) 78 348 348</a>';
